@@ -17,7 +17,7 @@ Cada hallazgo recorre siete estados. Cada estado tiene su carpeta en `states/`:
 | 00 | `primitiva` | La operación de confianza que se estudia (decisión mTLS) |
 | 01 | `explotar` | Protocolo experimental para disparar la condición (bajo RoE) |
 | 02 | `validar` | Veredicto `ACCEPTED / REJECTED` con hash de config y cert |
-| 03 | `efecto-emulado-real` | Efecto observado en laboratorio con evidencia |
+| 03 | `efecto-emulado-real` | Cerrado: no explotable, falso negativo |
 | 04 | `medicion` | TTD, bypass observado e IC95% |
 | 05 | `auditoria` | Gates, hashes y gobernanza G1/G3/G8 |
 | 06 | `publicacion` | Release de investigación con resultados reproduccibles |
@@ -29,7 +29,7 @@ Cada hallazgo recorre siete estados. Cada estado tiene su carpeta en `states/`:
 | 00 primitiva | Completo (análisis de `server/cmd/mtls.go`) |
 | 01 explotar | Protocolo documentado, sin ejecutar |
 | 02 validar | Completo sobre metadatos (8 tests Python + Zig) |
-| 03 efecto emulado real | Pendiente (requiere VM con sensores y RoE) |
+| 03 efecto emulado real | Cerrado: no explotable (análisis de código + fixtures) |
 | 04 medicion | Metodología lista, sin datos reales |
 | 05 auditoria | Completa (`artifacts.sha256`, gates) |
 | 06 publicacion | `RELEASE.md` (research 1.0.0) |

@@ -21,12 +21,17 @@ Todo lo que se sabe hoy, en un solo lugar. Cada afirmación lleva su fuente.
 | `C2_ALLOW_NO_MTLS_ALLOWLIST=1` | Escape hatch de laboratorio | No, ya auditado |
 | Allowlist con IP vs SAN DNS/IP | Bug de implementación | **Sí** |
 
-## 3. El hallazgo
+## 3. El hallazgo (cerrado)
 
 El allowlist no compara `IPAddresses` ni `URIs`. Un operador que configure
 `C2_MTLS_ALLOW=10.0.0.5` nunca verá aceptado un certificado con esa IP en el
-SAN. Es un falso negativo: el código es más restrictivo de lo que el flag
+SAN. Es un **falso negativo**: el código es más restrictivo de lo que el flag
 sugiere. No es un bypass; es una discrepancia de implementación.
+
+**No explotable.** La cadena se verifica contra un pool explícito y el allowlist
+vacío es fail-closed. Ignorar IP/URI hace el sistema más estricto, no más débil.
+No hay primitiva de ataque: el uplift para un atacante es cero. Ver
+`states/03-efecto-emulado-real.md`.
 
 ## 4. Nombre
 
@@ -43,7 +48,13 @@ pila lo considera válido. El sufijo `-SAN`evita que parezca un rename de BYOVD.
 - G3: ningún hallazgo se cierra automáticamente; cierre = retest.
 - G8: rutas y hashes sanitizados, sin secretos.
 
-## 6. Fuentes
+## 6. Veredicto ofensivo
+
+No vale la pena weaponizar. No hay primitiva explotable, el uplift es cero y el
+valor está en el hardening: documentar el formato del allowlist y añadir un
+test que haga visible el falso negativo.
+
+## 7. Fuentes
 
 - `AUDITORIA_OFENSIVA_c2-dect_2026.md` (vectores y escape hatches)
 - `c2dect-investigacion/OFENSIVA/07-bypass-auditable.md`

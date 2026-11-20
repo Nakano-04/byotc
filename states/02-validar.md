@@ -25,7 +25,7 @@ python byotc_audit.py fixtures/byotc_config.json fixtures/byotc_certs.json > r2.
 |---|---|---|
 | `cert-ca-lab-dns` | ACCEPTED | `san_dns_allowlisted` |
 | `cert-ca-atacante` | REJECTED | `chain_rejected` |
-| `cert-solo-ip` | REJECTED | `san_not_allowlisted` |
+| `cert-solo-ip` | REJECTED | `san_not_allowlisted` (el allowlist de la fixture no contiene la IP; si la contuviera, el código seguiría rechazándola: `san_ip_not_compared`) |
 | `cert-dns-distinto` | REJECTED | `san_not_allowlisted` |
 
 ## Criterio de validez

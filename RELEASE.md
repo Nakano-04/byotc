@@ -27,11 +27,15 @@ ni una herramienta de ataque.
 | 05 auditoría | Completo (gates A1-A6) |
 | 06 publicación | Este documento |
 
-## Hallazgo
+## Hallazgo (cerrado)
 
 BYOTC-SAN: `verifyMTLSLeaf()` compara solo `leaf.DNSNames`, no `IPAddresses` ni
 `URIs`. Un allowlist con IP nunca acepta un certificado con esa IP en el SAN.
 Falso negativo de implementación, verificado sobre código real.
+
+**No explotable.** La cadena se valida contra un pool explícito y el allowlist
+vacío es fail-closed. Ignorar IP/URI hace el sistema más estricto. Uplift para
+un atacante: cero. El valor del hallazgo es de hardening, no de ataque.
 
 ## Verificación
 
