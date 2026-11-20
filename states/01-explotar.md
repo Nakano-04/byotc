@@ -46,6 +46,13 @@ casos IDN. Para validar H-BYOTC-1 hace falta ejecutar contra el C2 real:
 - Sin cierre automático; cierre = retest (G3).
 - Hashes sanitizados, sin claves publicadas (G8).
 
-## Estado: MODELO COMPLETO, EJECUCIÓN REAL PENDIENTE
+## Ejecución real: COMPLETADA (Go real)
 
-No publicar certificados ni claves. Solo veredictos y hashes.
+`TestSANFronteraBYOTC` ejecutó los 8 casos contra `verifyMTLSLeaf` con
+`crypto/x509` real de Go. Resultado: idéntico al modelo. F1/F2 ACCEPTED,
+F3-F8 REJECTED. H-BYOTC-1 queda **refutada con evidencia real**.
+
+## Estado: CERRADO - 0 primitivas nuevas
+
+Ver `RESULTADO_VERIFICACION.md`. No se publican certificados ni claves;
+solo veredictos y hashes.

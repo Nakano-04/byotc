@@ -6,8 +6,10 @@
 con un hallazgo negativo: la técnica descrita produce un falso negativo
 (rechazo), no una aceptación indebida.
 
-Esto se ha verificado leyendo el código real (`server/cmd/mtls.go:29-69`) y
-ejecutando el verificador sobre las cuatro fixtures.
+Esto se ha verificado de tres formas independientes: leyendo el código real
+(`server/cmd/mtls.go:29-69`), ejecutando los modelos Python/Zig, y ejecutando
+`TestSANFronteraBYOTC` con `crypto/x509` real de Go sobre 8 certificados
+efímeros. Las tres coinciden. Ver `RESULTADO_VERIFICACION.md`.
 
 ## Análisis de explotabilidad (línea por línea)
 
