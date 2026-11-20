@@ -1,0 +1,6 @@
+[
+  {"id": "cert-ca-lab-dns", "issuer": "ca-lab", "san_dns": ["edge.lab.local"], "san_ip": []},
+  {"id": "cert-ca-atacante", "issuer": "ca-atacante", "san_dns": ["edge.lab.local"], "san_ip": []},
+  {"id": "cert-solo-ip", "issuer": "ca-lab", "san_dns": [], "san_ip": ["10.0.0.5"]},
+  {"id": "cert-dns-distinto", "issuer": "ca-lab", "san_dns": ["otro.lab.local"], "san_ip": []}
+]
