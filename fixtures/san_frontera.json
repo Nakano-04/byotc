@@ -1,0 +1,13 @@
+{
+  "allowlist": ["edge.lab.local"],
+  "casos": [
+    {"id": "F1", "dns": "edge.lab.local", "nota": "baseline, coincide exacto"},
+    {"id": "F2", "dns": "EDGE.LAB.LOCAL", "nota": "mayusculas: strings.ToLower las normaliza"},
+    {"id": "F3", "dns": "edge.lab.local.", "nota": "trailing dot: NO coincide en el codigo actual"},
+    {"id": "F4", "dns": "xn--edge.lab.local", "nota": "prefijo punycode: variable de normalizacion"},
+    {"id": "F5", "dns": "*.lab.local", "nota": "wildcard: no se expande en el allowlist"},
+    {"id": "F6", "dns": "edge.lab.local.evil.com", "nota": "sufijo: NO coincide (subdominio)"},
+    {"id": "F7", "dns": "edge.lab.local\u0000.evil.com", "nota": "NUL embebido: frontera de parseo"},
+    {"id": "F8", "dns": "", "nota": "DNS vacio: sin coincidencia"}
+  ]
+}

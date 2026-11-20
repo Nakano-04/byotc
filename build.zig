@@ -23,13 +23,16 @@ pub fn build(b: *std.Build) void {
         .{ "verify_manifest_zig", "src/main.zig" },
         .{ "footprint_zig", "src/footprint.zig" },
         .{ "byotc_audit_zig", "src/byotc_audit.zig" },
+        .{ "san_probe_zig", "src/san_probe.zig" },
     };
     for (executables) |spec| {
         b.installArtifact(addExe(b, spec[0], spec[1], target, optimize));
     }
 
     const test_step = b.step("test", "Run unit tests");
-    const sources = [_][]const u8{ "src/main.zig", "src/footprint.zig", "src/byotc_audit.zig" };
+    const sources = [_][]const u8{
+        "src/main.zig", "src/footprint.zig", "src/byotc_audit.zig", "src/san_probe.zig",
+    };
     for (sources) |source| {
         const test_mod = b.createModule(.{
             .root_source_file = b.path(source),

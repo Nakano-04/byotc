@@ -1,38 +1,51 @@
-# 01 - Explotar (protocolo experimental, no capacidad)
+# 01 - Explotar (banco de SANs frontera)
 
-Este estado describe **cómo se dispara la condición** en laboratorio. No
-entrega código de explotación. Todo lo aquí descrito requiere VM aislada,
-RoE firmada y activos propios.
+Este estado describe el experimento para buscar una **primitiva nueva**: que la
+normalización de un SAN permita una coincidencia que el operador no pretendió.
 
-## Condición a disparar
+## Qué se busca
 
-Que el servidor tome una decisión de aceptación sobre un certificado cuyo
-controlador es el laboratorio, y registrar el resultado.
+`verifyMTLSLeaf` hace `strings.ToLower(dns)` y compara exacto contra el
+allowlist. La hipótesis H-BYOTC-1: algún nombre SAN "frontera" (trailing dot,
+punycode, wildcard, NUL embebido) que el operador consideraría equivalente a
+`edge.lab.local` es **aceptado** por el código aunque no debería.
 
-## Tres escenarios experimentales
+Resultado del modelo (`san_probe.py` / `san_probe_zig`, 8 casos):
 
-| Escenario | Configuración | Qué se observa |
-|---|---|---|
-| E1 | CA propia añadida al bundle | El leaf se acepta: la confianza viene de la config |
-| E2 | allowlist vacío + `C2_ALLOW_NO_MTLS_ALLOWLIST=1` | Escape hatch de laboratorio |
-| E3 | allowlist con IP, cert con SAN IP | Discrepancia DNS vs IP (el hallazgo) |
+| ID | SAN | Veredicto | Frontera |
+|---|---|---|---|
+| F1 | `edge.lab.local` | ACCEPTED | no (baseline) |
+| F2 | `EDGE.LAB.LOCAL` | ACCEPTED | no |
+| F3 | `edge.lab.local.` | REJECTED | sí |
+| F4 | `xn--edge.lab.local` | REJECTED | sí |
+| F5 | `*.lab.local` | REJECTED | sí |
+| F6 | `edge.lab.local.evil.com` | REJECTED | sí |
+| F7 | `edge.lab.local\0.evil.com` | REJECTED | sí |
+| F8 | `""` | REJECTED | sí |
 
-E1 y E2 son **configuración**, ya documentada: no son novedad. E3 es el
-hallazgo de implementación.
+**Conclusión del modelo:** la normalización es segura. Solo coinciden el
+baseline y el case-folding, que es intencionado. No hay colisión por trailing
+dot, punycode, wildcard ni NUL. Es un hallazgo negativo (0 primitivas nuevas).
 
-## Reglas del experimento
+## Ejecución real (pendiente)
 
-1. La RoE se genera con `tools/gate/make_lab_roe.py` (semilla pública de test).
-2. Se registra `t0` real y la config exacta (hash).
-3. No se publica el certificado de prueba ni la clave privada.
-4. Se publica solo el `verdict` y los hashes sanitizados (G8).
+El modelo usa `strings.ToLower` de Python/Zig. Go puede normalizar distinto en
+casos IDN. Para validar H-BYOTC-1 hace falta ejecutar contra el C2 real:
 
-## Qué NO se hace aquí
+1. VM aislada, snapshot limpio, RoE firmada (`tools/gate/make_lab_roe.py`).
+2. Generar 8 certificados de prueba con esos SANs (clave efímera, solo lab).
+3. Presentarlos al C2 y registrar el veredicto real de `verifyMTLSLeaf`.
+4. Comparar con el modelo; cualquier divergencia es un hallazgo nuevo.
 
-- No se genera un certificado con clave ajena.
-- No se suplanta a un tercero.
-- No se conecta a un C2 real.
+## Gobernanza (aplicada al ejecutar)
 
-## Estado: PROTOCOLO DOCUMENTADO, SIN EJECUTAR
+- RoE firmada vigente, `scope=engagement`.
+- `allow_impact_modules=true` por tenant.
+- Killswitch, kill-date, techo de tiempo, escala.
+- `DetectionRecord` con `RuleID` y `Source` (G1).
+- Sin cierre automático; cierre = retest (G3).
+- Hashes sanitizados, sin claves publicadas (G8).
 
-Requiere el laboratorio del plan 09 (`c2dect-investigacion`).
+## Estado: MODELO COMPLETO, EJECUCIÓN REAL PENDIENTE
+
+No publicar certificados ni claves. Solo veredictos y hashes.

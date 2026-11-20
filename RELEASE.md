@@ -37,6 +37,14 @@ Falso negativo de implementación, verificado sobre código real.
 vacío es fail-closed. Ignorar IP/URI hace el sistema más estricto. Uplift para
 un atacante: cero. El valor del hallazgo es de hardening, no de ataque.
 
+## Banco de SANs frontera (nuevo)
+
+`san_probe.py` / `san_probe_zig` prueban 8 nombres SAN frontera contra la regla
+de decisión del allowlist. Resultado del modelo: solo coinciden el baseline y
+el case-folding; trailing dot, punycode, wildcard, sufijo y NUL se rechazan.
+**0 primitivas nuevas** en el modelo. Ejecución real contra el C2 pendiente
+(requiere VM + RoE). Ver `states/01-explotar.md`.
+
 ## Verificación
 
 - 3 ejecutables Zig compilados en ReleaseFast.

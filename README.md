@@ -15,7 +15,7 @@ Cada hallazgo recorre siete estados. Cada estado tiene su carpeta en `states/`:
 | # | Estado | Qué produce |
 |---|---|---|
 | 00 | `primitiva` | La operación de confianza que se estudia (decisión mTLS) |
-| 01 | `explotar` | Protocolo experimental para disparar la condición (bajo RoE) |
+| 01 | `explotar` | Banco de SANs frontera en busca de primitiva nueva (modelo: 0 hallazgos) |
 | 02 | `validar` | Veredicto `ACCEPTED / REJECTED` con hash de config y cert |
 | 03 | `efecto-emulado-real` | Cerrado: no explotable, falso negativo |
 | 04 | `medicion` | TTD, bypass observado e IC95% |
